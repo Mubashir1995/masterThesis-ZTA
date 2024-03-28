@@ -2,6 +2,77 @@
 
 This repository contains two Node.js applications that demonstrate the implementation of a basic login and registration system with and without Zero Trust Security principles. The applications showcase different authentication mechanisms and serve as a comparison to evaluate the effectiveness and usability of Zero Trust Security.
 
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- Node.js version 19.4.0
+- npm (Node Package Manager) version 9.2.0
+
+## Setup Instructions
+
+### Windows
+
+1. **Download Node.js and npm:**
+   - Download and install Node.js and npm from the official website: [Node.js Downloads](https://nodejs.org/en/download/)
+
+2. **Clone the Repository:**
+   - Open Command Prompt (cmd) and navigate to the directory where you want to clone the repository.
+   - Run the following command to clone the repository:
+     ```
+     git clone https://github.com/Mubashir1995/masterThesis-ZTA.git
+     ```
+
+3. **Install Dependencies:**
+   - Navigate to the project directory:
+     ```
+     cd masterThesis-ZTA
+     ```
+   - Install dependencies using npm:
+     ```
+     npm install
+     ```
+
+4. **Run the Application:**
+   - Start the server:
+     ```
+     node app.js
+     ```
+   - Open a web browser and visit `http://localhost:3000` to access the application.
+
+### macOS
+
+1. **Download Node.js and npm:**
+   - Download and install Node.js and npm using Homebrew:
+     ```
+     brew install node@19.4.0
+     ```
+
+2. **Clone the Repository:**
+   - Open Terminal and navigate to the directory where you want to clone the repository.
+   - Run the following command to clone the repository:
+     ```
+     git clone https://github.com/Mubashir1995/masterThesis-ZTA.git
+     ```
+
+3. **Install Dependencies:**
+   - Navigate to the project directory:
+     ```
+     cd masterThesis-ZTA
+     ```
+   - Install dependencies using npm:
+     ```
+     npm install
+     ```
+
+4. **Run the Application:**
+   - Start the server:
+     ```
+     node app.js
+     ```
+   - Open a web browser and visit `http://localhost:3000` to access the application.
+
+
 ## Description
 
 ### Without Zero Trust Security (withoutZTA)

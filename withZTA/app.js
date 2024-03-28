@@ -16,15 +16,41 @@ let users = [];
 // Secret key for JWT
 const secretKey = 'your_secret_key';
 
+// Basic CSS styling
+const basicStyle = `
+    body { font-family: Arial, sans-serif; }
+    h1 { color: #333; }
+    form { margin-bottom: 20px; }
+    input[type="text"], input[type="password"], button { margin-top: 10px; }
+    button { padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer; }
+    button:hover { background-color: #0056b3; }
+    a { color: #007bff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+`;
+
+// Route for root page
+app.get('/', (req, res) => {
+    res.send(`
+        <style>${basicStyle}</style>
+        <h1>Welcome to the Login System Using Zero-Trust Security</h1>
+        <h2>Master Thesis Implementation By: Syed Mashir Abbas & Mubashir Ali</h2>
+        <p>Register or login to access the protected page.</p>
+        <a href="/register">Register</a> | <a href="/login">Login</a>
+    `);
+});
+
 // Route to render the registration form
 app.get('/register', (req, res) => {
     res.send(`
+        <style>${basicStyle}</style>
         <h1>Register</h1>
         <form action="/register" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Register</button>
         </form>
+        <br>
+        <a href="/">Back to Home</a>
     `);
 });
 
@@ -37,19 +63,22 @@ app.post('/register', (req, res) => {
     } else {
         // Add the new user to the list (replace this with database insertion in a real-world application)
         users.push({ username, password });
-        res.send('Registration successful');
+        res.send('Registration successful. <a href="/login">Login</a>');
     }
 });
 
 // Route to render the login form
 app.get('/login', (req, res) => {
     res.send(`
+        <style>${basicStyle}</style>
         <h1>Login</h1>
         <form action="/login" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
+        <br>
+        <a href="/">Back to Home</a>
     `);
 });
 
@@ -61,9 +90,13 @@ app.post('/login', (req, res) => {
     if (user) {
         // Generate JWT token
         const token = jwt.sign({ username }, secretKey);
-        res.json({ token });
+        // Redirect to protected page with token in query parameter
+        res.redirect(`/protected?token=${token}`);
     } else {
-        res.status(401).send('Invalid username or password');
+        res.status(401).send(`
+            <style>${basicStyle}</style>
+            Invalid username or password. <a href="/login">Try again</a>
+        `);
     }
 });
 
@@ -73,23 +106,33 @@ app.get('/protected', verifyToken, (req, res) => {
         if (err) {
             res.sendStatus(403);
         } else {
-            res.send('Welcome to the protected route, ' + authData.username);
+            res.send(`
+                <style>${basicStyle}</style>
+                <h1>Protected Page</h1>
+                <p>Welcome, ${authData.username}!</p>
+                <p>This is a protected page accessible only with a valid token.</p>
+                <form action="/logout" method="post">
+                    <button type="submit">Logout</button>
+                </form>
+            `);
         }
     });
 });
 
+// Route for user logout
+app.post('/logout', (req, res) => {
+    // Redirect to home page and invalidate the token
+    res.redirect('/');
+});
+
 // Verify JWT token middleware
 function verifyToken(req, res, next) {
-    // Get auth header value
-    const bearerHeader = req.headers['authorization'];
-    // Check if bearer is undefined
-    if (typeof bearerHeader !== 'undefined') {
-        // Split at the space
-        const bearer = bearerHeader.split(' ');
-        // Get token from array
-        const bearerToken = bearer[1];
-        // Set the token
-        req.token = bearerToken;
+    // Get token from query parameter
+    const token = req.query.token;
+    // Check if token exists
+    if (token) {
+        // Set the token in request object
+        req.token = token;
         // Next middleware
         next();
     } else {
